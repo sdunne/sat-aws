@@ -1,0 +1,1 @@
+ansible_ssh_commmon_args: '-o ProxyCommand="ssh -W %h:%p -q ec2-user@bastion.sdunne.net"'

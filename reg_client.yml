@@ -1,0 +1,76 @@
+---
+- name: pull cert file from sat server for rex
+  hosts: sat
+  become: yes
+
+  vars_files:
+  #   - secrets.yml
+   - vars.yml
+
+  tasks:
+    - name: pull cert file from sat server for rex
+      fetch:
+        src: /var/lib/foreman-proxy/ssh/id_rsa_foreman_proxy.pub
+        dest: files/
+        flat: yes
+
+- name: register with Sat6
+  hosts: clients
+  become: yes
+  gather_facts: true
+
+  vars_files: 
+  #   - secrets.yml
+   - vars.yml
+
+  vars:
+
+  tasks:
+    - name: remove aws rhui repos
+      file:
+        path: '{{ item }}'
+        state: absent
+      loop:
+       - /etc/yum.repos.d/redhat-rhui-client-config.repo
+       - /etc/yum.repos.d/redhat-rhui.repo
+       - /etc/yum.repos.d/rhui-load-balancers.conf
+
+    - name: configure /etc/hosts so client can reach Sat server
+      lineinfile:
+        path: /etc/hosts
+        insertafter: EOF
+        line: "{{ sat_ip }} {{ hostname }}"
+      tags: hostsfile
+
+    - name: install 
+      yum:
+        name: "http://{{ hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+        state: present
+ 
+    - name: add admin user
+      user:
+        name: admin
+        password: '$6$mysecretsalt$2BIL/4b2eSe.8tpiKhcRS6D3pLEp4j61F.gjCEVGMMfX6EEq3.0VogJYpjuSBiIKkSrZR01ChIVA4U3Y.jR0k/'
+        groups: wheel
+      tags: admin
+
+    - name: subscription-manager register and attach pool
+      redhat_subscription:
+        state: present
+        #username: "{{ rhsm_username }}" 
+        #password: "{{ rhsm_password }}" 
+        #pool: "{{ pool }}"
+        org_id: "Default_Organization"
+        activationkey: test
+
+    - name: install katello-host-tools
+      yum:
+        name: katello-host-tools
+        state: present
+
+    - name: 
+      authorized_key:
+        user: admin
+        state: present
+        key: "{{ lookup('file', 'files/id_rsa_foreman_proxy.pub') }}" 
+

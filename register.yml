@@ -1,0 +1,38 @@
+---
+- name: register with RHSM and other changes
+  hosts: all
+  become: yes
+  gather_facts: false
+
+  vars_files: 
+   - secrets.yml
+   - vars.yml
+
+  vars:
+
+  tasks:
+    - name: remove aws rhui repos
+      file:
+        path: '{{ item }}'
+        state: absent
+      loop:
+       - /etc/yum.repos.d/redhat-rhui-client-config.repo
+       - /etc/yum.repos.d/redhat-rhui.repo
+       - /etc/yum.repos.d/rhui-load-balancers.conf
+
+    - name: change hostname
+      hostname:
+        name: "{{ hostname }}"
+
+    - name: subscription-manager register and attach pool
+      redhat_subscription:
+        state: present
+        username: "{{ rhsm_username }}" 
+        password: "{{ rhsm_password }}" 
+        pool: "{{ pool }}"
+
+        #    - name: yum update all packages
+        #yum:
+        #name: "*"
+        #state: latest
+
