@@ -1,0 +1,38 @@
+---
+- name: provision ec2 instances
+  hosts: localhost
+  gather_facts: False
+  become: false
+
+  vars:
+    keypair: sdunnerh
+    instance_type: t2.small
+    #image: ami-00936483548a6d57f #RHEL 7.7
+    image: ami-002cdac160d085b42 #RHEL 8.1
+    region: us-east-1
+    group: sdunne-sg-sub1
+    vpc_subnet_id: subnet-0e2b1148765ba7dc4
+    count: 2
+    servername: sdunne-host1
+    iam_role: 
+    disk_size: 10 
+
+  tasks:
+    - name: Provision ec2 instances
+      ec2:
+         key_name: "{{ keypair }}" 
+         instance_type: "{{ instance_type }}" 
+         image: "{{ image }}"
+         region: "{{ region }}" 
+         group: "{{ group }}" 
+         vpc_subnet_id: "{{ vpc_subnet_id }}"
+         count: "{{ count }}" 
+         instance_tags:
+           Name: "{{ servername }}"
+           Owner: sdunne@redhat.com
+           #         instance_profile_name: "{{ iam_role }}"
+         wait: yes
+         volumes:
+           - device_name: /dev/sda1
+             volume_size: "{{ disk_size }}"
+             delete_on_termination: yes

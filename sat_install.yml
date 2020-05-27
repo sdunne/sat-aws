@@ -12,6 +12,7 @@
     packages:
      - vim
      - tmux
+     - insights-client
      - satellite
 
   tasks:
@@ -19,13 +20,14 @@
       lineinfile:
         path: /etc/hosts
         insertafter: EOF
-        line: "{{ ansible_facts.default_ipv4.address }} {{ hostname }}"
+        line: "{{ ansible_facts.default_ipv4.address }} {{ sat_hostname }}"
       tags: hostsfile
 
     - name: Disable all RHSM repositories
       rhsm_repository:
         name: '*'
         state: disabled
+      tags: never
 
     - name: enable repos for Satellite install
       rhsm_repository:
@@ -37,6 +39,7 @@
         - rhel-7-server-satellite-maintenance-6-rpms
         - rhel-server-rhscl-7-rpms 
         - rhel-7-server-ansible-2.8-rpms
+      tags: never
 
     - name: install sat6 and other packages
       yum:
@@ -47,3 +50,9 @@
       yum:
         name: "*"
         state: latest
+
+    - name: register to Insights
+      insights_register:
+        state: present
+
+

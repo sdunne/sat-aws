@@ -1,21 +1,21 @@
 ---
-- name: provision ec2 instances
+- name: provision ec2 instance for Ansible Tower
   hosts: localhost
   gather_facts: False
   become: false
 
   vars:
     keypair: sdunnerh
-    instance_type: t2.small
-    #image: ami-00936483548a6d57f #RHEL 7.7
-    image: ami-002cdac160d085b42 #RHEL 8.1
+    instance_type: m4.large
+    #image: ami-00936483548a6d57f # RHEL 7.7 BYOL
+    image: ami-002cdac160d085b42 # RHEL 8.1 BYOL
     region: us-east-1
     group: sdunne-sg-sub1
     vpc_subnet_id: subnet-0e2b1148765ba7dc4
     count: 1
-    servername: sdunne-host1
-    iam_role: 
-    disk_size: 10 
+    servername: tower
+    iam_role: sdunne-sat6
+    disk_size: 50
 
   tasks:
     - name: Provision ec2 instances
@@ -30,7 +30,7 @@
          instance_tags:
            Name: "{{ servername }}"
            Owner: sdunne@redhat.com
-           #         instance_profile_name: "{{ iam_role }}"
+         instance_profile_name: "{{ iam_role }}"
          wait: yes
          volumes:
            - device_name: /dev/sda1

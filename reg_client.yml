@@ -34,6 +34,7 @@
        - /etc/yum.repos.d/redhat-rhui-client-config.repo
        - /etc/yum.repos.d/redhat-rhui.repo
        - /etc/yum.repos.d/rhui-load-balancers.conf
+       - /etc/yum.repos.d/redhat-rhui-beta.repo.disabled
 
     - name: configure /etc/hosts so client can reach Sat server
       lineinfile:
@@ -62,11 +63,12 @@
         #pool: "{{ pool }}"
         org_id: "Default_Organization"
         activationkey: test
+        force_register: yes
 
     - name: install katello-host-tools
       yum:
         name: katello-host-tools
-        state: present
+        state: latest
 
     - name: 
       authorized_key:
