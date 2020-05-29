@@ -1,0 +1,23 @@
+---
+# file: group_vars/all.yml
+#
+# settings for AWS
+ansible_ssh_commmon_args: '-o ProxyCommand="ssh -W %h:%p -q ec2-user@bastion.sdunne.net"'
+keypair: sdunnerh
+region: us-east-1
+group: sdunne-sg-sub1
+vpc_subnet_id: subnet-0e2b1148765ba7dc4
+
+# Satellite settings
+sat_hostname: sat6.sdunne.aws
+sat_ip: 10.10.1.182 #fix this - grab ip from Sat server
+
+# Tower settings
+tower_hostname: tower.sdunne.aws
+tower_servername: sdunne-tower
+tower_iam_role: sdunne_tower
+tower_disk_size: 50 
+tower_instance_type: m4.large
+#tower_image: ami-00936483548a6d57f # RHEL 7.7 BYOL
+tower_image: ami-002cdac160d085b42 # RHEL 8.1 BYOL
+
