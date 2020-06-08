@@ -1,6 +1,6 @@
 ---
 - name: register with RHSM and other changes
-  hosts: all
+  hosts: tower
   become: yes
   gather_facts: false
 
@@ -18,21 +18,21 @@
       loop:
        - /etc/yum.repos.d/redhat-rhui-client-config.repo
        - /etc/yum.repos.d/redhat-rhui.repo
-       - /etc/yum.repos.d/rhui-load-balancers.conf
+       - /etc/yum.repos.d/redhat-rhui-beta.repo.disabled
 
     - name: change hostname
       hostname:
-        name: "{{ hostname }}"
+        name: "{{ tower_hostname }}"
 
     - name: subscription-manager register and attach pool
       redhat_subscription:
         state: present
         username: "{{ rhsm_username }}" 
         password: "{{ rhsm_password }}" 
-        pool: "{{ pool }}"
+        pool: "{{ tower_pool }}"
 
-        #    - name: yum update all packages
-        #yum:
-        #name: "*"
-        #state: latest
+    - name: yum update all packages
+      yum:
+        name: "*"
+        state: latest
 

@@ -1,0 +1,51 @@
+---
+- name: install Tower
+  hosts: tower 
+  become: yes
+  gather_facts: true 
+
+  vars_files: 
+   - secrets.yml
+   - vars.yml
+
+  vars:
+    packages:
+     - vim
+     - tmux
+     - ansible
+
+  tasks:
+    - name: download and unarchive latest ansible tower setup file 
+      unarchive:
+        src: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
+        dest: /home/ec2-user
+        remote_src: yes
+        list_files: yes
+      register: archive_contents
+      
+    - name: enable ansible repo
+      rhsm_repository:
+        name: ansible-2.9-for-rhel-8-x86_64-rpms
+        state: enabled
+
+    - name: install other packages
+      yum:
+        name: "{{ packages }}"
+        state: latest
+
+    - name: display setup dir
+      debug: var=archive_contents.files[0]
+
+    - name: copy inventory file with passwords 
+      template:
+        src: templates/inventory.j2
+        dest: /home/ec2-user/{{ archive_contents.files[0] }}inventory
+
+    - name: run ansible tower setup
+      command: "sh {{ archive_contents.files[0] }}setup.sh"
+      register: tower_setup
+
+    - name: show results of tower setup
+      debug: var=tower_setup
+
+        

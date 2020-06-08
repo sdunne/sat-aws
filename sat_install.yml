@@ -1,6 +1,6 @@
 ---
 - name: install Sat 6.x 
-  hosts: all
+  hosts: sat
   become: yes
   gather_facts: true 
 
