@@ -48,4 +48,15 @@
     - name: show results of tower setup
       debug: var=tower_setup
 
-        
+    - name: install/post license
+      uri:
+        url: https://localhost/api/v2/config/    
+        method: POST
+        body_format: json
+        body: "{{ lookup('file','files/license.json') }}"
+        user: admin
+        password: "{{ tower_password }}"
+        validate_certs: false
+        force_basic_auth: true
+      tags: license
+
