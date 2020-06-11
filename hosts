@@ -2,8 +2,14 @@
 10.10.1.182
 
 [tower]
-10.10.1.88
+10.10.1.254
 
 [clients]
 10.10.1.74
 10.10.1.138
+
+[xbastion:children]
+sat
+tower
+clients
+

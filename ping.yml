@@ -1,0 +1,14 @@
+---
+- name: simple ping
+  hosts: all
+  become: no
+  gather_facts: false
+
+  tasks:
+    - name: simple ping
+      ping:
+      register: results
+
+    - name: debug
+      debug:
+        msg: results

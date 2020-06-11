@@ -1,8 +1,8 @@
 ---
-# file: group_vars/all.yml
+# file: group_vars/all
 #
 # settings for AWS
-ansible_ssh_commmon_args: '-o ProxyCommand="ssh -W %h:%p -q ec2-user@bastion.sdunne.net"'
+ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q ec2-user@bastion.sdunne.net"'
 keypair: sdunnerh
 region: us-east-1
 group: sdunne-sg-sub1
