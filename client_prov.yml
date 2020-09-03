@@ -8,11 +8,12 @@
     keypair: sdunnerh
     instance_type: t2.small
     #image: ami-00936483548a6d57f #RHEL 7.7
-    image: ami-002cdac160d085b42 #RHEL 8.1
+    #image: ami-002cdac160d085b42 #RHEL 8.1
+    image: ami-07cd882114d14e9f4 #RHEL 8.2
     region: us-east-1
-    group: sdunne-sg-sub1
-    vpc_subnet_id: subnet-0e2b1148765ba7dc4
-    count: 2
+    group: sdunne-sg-sub1 
+    vpc_subnet_id: subnet-0c850d7b9de8ec6ea
+    count: 2 
     servername: sdunne-host1
     iam_role: 
     disk_size: 10 

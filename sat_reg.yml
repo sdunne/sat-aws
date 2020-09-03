@@ -1,12 +1,12 @@
 ---
 - name: register with RHSM and other changes
-  hosts: all
+  hosts: sat
   become: yes
   gather_facts: false
 
   vars_files: 
    - secrets.yml
-   - vars.yml
+#   - vars.yml
 
   vars:
 
@@ -22,7 +22,7 @@
 
     - name: change hostname
       hostname:
-        name: "{{ hostname }}"
+        name: "{{ sat_hostname }}"
 
     - name: subscription-manager register and attach pool
       redhat_subscription:

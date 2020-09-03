@@ -2,11 +2,10 @@
 - name: install Sat 6.x 
   hosts: sat
   become: yes
-  gather_facts: true 
 
   vars_files: 
-   - secrets.yml
-   - vars.yml
+#   - secrets.yml
+#   - vars.yml
 
   vars:
     packages:
@@ -51,8 +50,8 @@
         name: "*"
         state: latest
 
-    - name: register to Insights
-      insights_register:
-        state: present
+#    - name: register to Insights
+#      insights_register:
+#        state: present
 
 
