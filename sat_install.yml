@@ -4,7 +4,7 @@
   become: yes
 
   vars_files: 
-#   - secrets.yml
+   - secrets.yml
 #   - vars.yml
 
   vars:
@@ -50,8 +50,15 @@
         name: "*"
         state: latest
 
-#    - name: register to Insights
-#      insights_register:
-#        state: present
+    - name: satellite-installer
+      command: 'satellite-installer --scenario satellite --foreman-initial-admin-username admin --foreman-initial-admin-password "{{ sat_password }}" --foreman-proxy-puppetca true --foreman-proxy-tftp true --enable-foreman-plugin-discovery --enable-foreman-plugin-remote-execution-cockpit'
+      register: sat_install_output
 
+    - name: show sat install output
+      debug:
+        var: sat_install_output
 
+    - name: register to insights
+      insights_register:
+        state: present
+      tags: insights
