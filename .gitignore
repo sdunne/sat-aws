@@ -1,3 +1,4 @@
 secrets.yml
 *.retry
 license.json
+#ansible.cfg

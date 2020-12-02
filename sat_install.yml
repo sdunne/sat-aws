@@ -12,6 +12,7 @@
      - vim
      - tmux
      - insights-client
+     - python2-apypie
      - satellite
 
   tasks:
