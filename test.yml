@@ -1,0 +1,10 @@
+---
+- name: test with ping module
+  hosts: all 
+  become: no 
+  gather_facts: no
+
+  tasks:
+    - name: ping system
+      ping:
+

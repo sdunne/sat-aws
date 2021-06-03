@@ -2,10 +2,11 @@
 - name: pull cert file from sat server for rex
   hosts: sat
   become: yes
+  gather_facts: no
 
   vars_files:
-  #   - secrets.yml
-   - vars.yml
+#   - secrets.yml
+#   - vars.yml
 
   tasks:
     - name: pull cert file from sat server for rex
@@ -13,15 +14,16 @@
         src: /var/lib/foreman-proxy/ssh/id_rsa_foreman_proxy.pub
         dest: files/
         flat: yes
+      tags: cert
 
 - name: register with Sat6
   hosts: clients
   become: yes
-  gather_facts: true
+  gather_facts: no
 
   vars_files: 
-  #   - secrets.yml
-   - vars.yml
+#    - secrets.yml
+#   - vars.yml
 
   vars:
 
@@ -40,12 +42,13 @@
       lineinfile:
         path: /etc/hosts
         insertafter: EOF
-        line: "{{ sat_ip }} {{ hostname }}"
+        line: "{{ sat_ip }} {{ sat_hostname }}"
       tags: hostsfile
 
     - name: install 
       yum:
-        name: "http://{{ hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+        name: "http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+        disable_gpg_check: yes
         state: present
  
     - name: add admin user

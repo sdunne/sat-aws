@@ -11,9 +11,9 @@
     #image: ami-002cdac160d085b42 #RHEL 8.1
     image: ami-07cd882114d14e9f4 #RHEL 8.2
     region: us-east-1
-    group: sdunne-sg-sub1 
+    group: sdunne-sg-inside
     vpc_subnet_id: subnet-0c850d7b9de8ec6ea
-    count: 2 
+    count: 1
     servername: sdunne-host1
     iam_role: 
     disk_size: 10 
